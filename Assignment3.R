@@ -28,4 +28,16 @@ combinedFIPSStormDetails <- filteredSubsetStormDetails1997 %>%
 renamedStormDetails <- rename_all(combinedFIPSStormDetails,tolower)
 
 #Step 8
-us_state_info<-data.frame(state=state.name, region=state.region, area=state.area)
+state_info <- data.frame(state = state.name, region = state.region, area = state.area)
+
+#Step 9
+NumberEventsStormDetails <- data.frame(table(renamedStormDetails$state))
+renamedNumberEventsStormsDetails <- NumberEventsStormDetails %>%
+  rename("state" = "Var1", "freq" = "Freq") 
+merged <- merge(renamedNumberEventsStormsDetails, state_info, by = "state")
+
+#Step 10
+
+ggplot(merged, aes(x = area, y = freq)) + geom_point(aes(color=region)) + labs(x = "Land area (square miles)", 
+                                                                               y = "# of storm events in 1997")
+
